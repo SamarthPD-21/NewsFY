@@ -60,7 +60,13 @@ async function fetchNews(t = 'latest', p = 1) {
     try {
         nc.innerHTML = '<div class="loading">Loading...</div>';
         const u = `https://newsapi.org/v2/everything?q=${encodeURIComponent(t)}&pageSize=10&page=${p}&apiKey=${k}`;
-        const res = await fetch(u);
+        
+        const res = await fetch(u, {
+            headers: {
+                'Accept': 'application/json',
+                'Connection': 'keep-alive',
+            },
+        });
 
         if (!res.ok) {
             throw new Error(`HTTP error! status: ${res.status}`);
