@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NewsFY</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>NewsFY</h1>
+        <input type="text" id="q" placeholder="Search for news..." list="sh" />
+        <datalist id="sh"></datalist>
+        <button id="sb">Search</button>
+    </header>
+    <main>
+        <div id="nc"></div>
+        <div class="pagination">
+            <button id="prev" disabled>Previous</button>
+            <button id="next">Next</button>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>

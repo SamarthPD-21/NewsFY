@@ -1,0 +1,148 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+header {
+    padding: 20px;
+    text-align: center;
+    background-color: #007BFF;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header h1 {
+    margin: 0;
+}
+
+header input {
+    width: 60%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+header button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #0056b3;
+    color: white;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+header button:hover {
+    background-color: #003d80;
+}
+
+main {
+    padding: 20px;
+}
+
+#nc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.na {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.na img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.na .c {
+    padding: 15px;
+    flex-grow: 1;
+}
+
+.na h3 {
+    font-size: 18px;
+    margin: 0 0 10px;
+}
+
+.na p {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #555;
+}
+
+.na a {
+    display: block;
+    text-decoration: none;
+    color: white;
+    background: #007BFF;
+    text-align: center;
+    padding: 10px;
+    border-radius: 0 0 8px 8px;
+    font-weight: bold;
+}
+
+.na a:hover {
+    background: #0056b3;
+}
+
+.error {
+    text-align: center;
+    color: #721c24;
+    background-color: #f8d7da;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px auto;
+    max-width: 600px;
+}
+
+.loading {
+    text-align: center;
+    font-size: 18px;
+    margin-top: 20px;
+}
+
+.pagination {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.pagination button {
+    padding: 10px 15px;
+    margin: 5px;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.pagination button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+    header input {
+        width: 80%;
+        margin-bottom: 10px;
+    }
+
+    header button {
+        width: 100%;
+    }
+}
