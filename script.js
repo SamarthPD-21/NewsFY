@@ -1,125 +1,113 @@
-const k = '6655aabe7b80496295c611ca9f41ca71'; 
+const k = 'FngMjYtCrvAgEUtKixX1Lo1Ef2PVVaSNw0S5VPhNTzLeI5Qp'; 
 const sb = document.getElementById('sb');
 const q = document.getElementById('q');
 const nc = document.getElementById('nc');
 const prev = document.getElementById('prev');
 const next = document.getElementById('next');
 const sh = document.getElementById('sh');
-
-let p = 1; 
+let p = 1;
 let t = 'latest'; 
-
-function saveHistory(q) {
-    const h = JSON.parse(localStorage.getItem('h')) || [];
-    if (!h.includes(q)) {
-        h.push(q);
-        localStorage.setItem('h', JSON.stringify(h));
-        updateSh();
+function saveHistory(query) {
+    const history = JSON.parse(localStorage.getItem('h')) || [];
+    if (!history.includes(query)) {
+        history.push(query);
+        localStorage.setItem('h', JSON.stringify(history));
+        updateSearchHistory();
     }
 }
-
-function updateSh() {
-    const h = JSON.parse(localStorage.getItem('h')) || [];
-    sh.innerHTML = h.map(i => `<option value="${i}"></option>`).join('');
+function updateSearchHistory() {
+    const history = JSON.parse(localStorage.getItem('h')) || [];
+    sh.innerHTML = history.map(item => `<option value="${item}"></option>`).join('');
 }
+function createCard(article) {
+    if (!article?.title || !article?.url || !article?.image) return null;
 
-function createCard(a) {
-    if (!a?.title || !a?.url || !a?.urlToImage) return null;
-
-    const c = document.createElement('div');
-    c.classList.add('na');
+    const card = document.createElement('div');
+    card.classList.add('na');
 
     const img = new Image();
-    img.src = a.urlToImage;
-    img.alt = a.title;
+    img.src = article.image;
+    img.alt = article.title;
     img.onerror = () => {
-        img.src = 'https://via.placeholder.com/300x150?text=No+Image';
+        card.remove();
     };
 
-    const d = document.createElement('div');
-    d.classList.add('c');
-    d.innerHTML = `
-        <h3>${a.title}</h3>
-        <p>${a.description || 'No description available.'}</p>
+    const content = document.createElement('div');
+    content.classList.add('c');
+    content.innerHTML = `
+        <h3>${article.title}</h3>
+        <p>${article.description || 'No description available.'}</p>
     `;
 
-    const l = document.createElement('a');
-    l.href = a.url;
-    l.target = '_blank';
-    l.rel = 'noopener noreferrer';
-    l.textContent = 'Read More';
+    const link = document.createElement('a');
+    link.href = article.url;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.textContent = 'Read More';
 
-    c.appendChild(img);
-    c.appendChild(d);
-    c.appendChild(l);
+    card.appendChild(img);
+    card.appendChild(content);
+    card.appendChild(link);
 
-    return c;
+    return card;
 }
-
-async function fetchNews(t = 'latest', p = 1) {
+async function fetchNews(query = 'latest', page = 1) {
     try {
         nc.innerHTML = '<div class="loading">Loading...</div>';
-        const u = `https://newsapi.org/v2/everything?q=${encodeURIComponent(t)}&pageSize=10&page=${p}&apiKey=${k}`;
+        const url = `https://api.currentsapi.services/v1/search?keywords=${encodeURIComponent(query)}&page_number=${page}&apiKey=${k}`;
         
-        const res = await fetch(u, {
-            headers: {
-                'Accept': 'application/json',
-                'Connection': 'keep-alive',
-            },
-        });
+        const response = await fetch(url);
 
-        if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        const d = await res.json();
+        const data = await response.json();
 
-        if (d.status === 'error') {
-            throw new Error(d.message || 'API Error');
+        if (data.status === 'error') {
+            throw new Error(data.message || 'API Error');
         }
 
         nc.innerHTML = '';
 
-        if (!d.articles?.length) {
+        if (!data.news?.length) {
             nc.innerHTML = '<div class="error">No articles found.</div>';
             return;
         }
 
-        d.articles
-            .map(a => createCard(a))
-            .filter(c => c !== null)
-            .forEach(c => nc.appendChild(c));
+        data.news
+            .map(article => createCard(article))
+            .filter(card => card !== null)
+            .forEach(card => nc.appendChild(card));
 
-        prev.disabled = p <= 1;
-        next.disabled = !d.articles.length;
-    } catch (err) {
-        nc.innerHTML = `<div class="error">Error: ${err.message}</div>`;
-        console.error('Error:', err);
+        prev.disabled = page <= 1;
+        next.disabled = !data.news.length;
+    } catch (error) {
+        nc.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+        console.error('Error fetching news:', error);
     }
 }
-
 sb.addEventListener('click', () => {
-    const v = q.value.trim();
-    if (v) {
-        t = v;
+    const value = q.value.trim();
+    if (value) {
+        t = value;
         p = 1;
-        saveHistory(v);
-        fetchNews(v, p);
+        saveHistory(value);
+        fetchNews(value, p);
     }
 });
 
-q.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        const v = q.value.trim();
-        if (v) {
-            t = v;
+q.addEventListener('keypress', (event) => {
+    if (event.key === 'Enter') {
+        const value = q.value.trim();
+        if (value) {
+            t = value;
             p = 1;
-            saveHistory(v);
-            fetchNews(v, p);
+            saveHistory(value);
+            fetchNews(value, p);
         }
     }
 });
-
 prev.addEventListener('click', () => {
     if (p > 1) {
         p--;
@@ -131,6 +119,5 @@ next.addEventListener('click', () => {
     p++;
     fetchNews(t, p);
 });
-
-updateSh();
+updateSearchHistory();
 fetchNews();
