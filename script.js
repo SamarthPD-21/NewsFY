@@ -59,7 +59,7 @@ function createCard(a) {
 async function fetchNews(t = 'latest', p = 1) {
     try {
         nc.innerHTML = '<div class="loading">Loading...</div>';
-        const u = `http://newsapi.org/v2/everything?q=${encodeURIComponent(t)}&pageSize=10&page=${p}&apiKey=${k}`;
+        const u = `https://newsapi.org/v2/everything?q=${encodeURIComponent(t)}&pageSize=10&page=${p}&apiKey=${k}`;
         const res = await fetch(u);
 
         if (!res.ok) {
